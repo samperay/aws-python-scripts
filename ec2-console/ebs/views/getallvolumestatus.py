@@ -11,24 +11,39 @@ ec2_mgmt_console = aws_mgmt_console.client(service_name="ec2", region_name="us-e
 volume_response=ec2_mgmt_console.describe_volumes()['Volumes']
 
 attachments=[]
-volume_instance_infos=[]
+volume_infos=[]
+volume_infos1=[]
 for each_item in volume_response:
     attachments.append(each_item['Attachments'])
 
-for each_attachment in attachments:
-    for each_item in each_attachment:
-        volume_instance_infos.append(each_item['InstanceId'])
-        volume_instance_infos.append(each_item['VolumeId'])
-        volume_instance_infos.append(each_item['State'])
-        volume_instance_infos.append(each_item['Device'])
-        
+# for each_attachment in attachments:
+#     for each_item in each_attachment:
+#         volume_infos.append(each_item['InstanceId'])
 
-
-
-
-
-# Get list of all volumes
-#for each_volume in volume_response:
-#    print(each_volume['VolumeId'],each_volume['Size'],each_volume['State'],each_volume['VolumeType'],each_volume['AvailabilityZone'])
+with open('./listvolumes.csv', 'w') as csvfile:
+    # Write Header for csv file 
+    fields = [ 'VolumeId', 
+               'Size',
+               'State',
+               'VolumeType',
+               'AvailabilityZone',
+             ]
+    csvwriter = csv.writer(csvfile)
+    csvwriter.writerow(fields)
+                
+    for each_volume in volume_response:
+      # volume_infos1.append(each_volume['VolumeId'])
+      # volume_infos1.append(each_volume['Size'])
+      # volume_infos1.append(each_volume['State'])
+      # volume_infos1.append(each_volume['VolumeType'])
+      # volume_infos1.append(each_volume['AvailabilityZone'])
+        volume_details = [ 
+                            each_volume['VolumeId'],
+                            each_volume['Size'],
+                            each_volume['State'],
+                            each_volume['VolumeType'],
+                            each_volume['AvailabilityZone'],
+                        ]
+        csvwriter.writerow(volume_details)
 
 
